@@ -1,6 +1,14 @@
 # Visual Studio 2015 user specific files
 .vs/
 
+# JetBrains Rider (IDEA) local workspace files
+.idea/
+.idea/workspace.xml
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/dictionaries
+.idea/**/shelf
+
 # Compiled Object files
 *.slo
 *.lo
