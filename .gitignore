@@ -81,3 +81,19 @@ DerivedDataCache/*
 .idea/**/tasks.xml
 .idea/**/dictionaries
 .idea/**/shelf
+
+# UE5 Standard Ignore
+Binaries/
+Intermediate/
+Saved/
+DerivedDataCache/
+Build/
+.vs/
+.idea/
+*.sln
+*.vcxproj
+*.opensdf
+*.sdf
+*.suo
+*.xcodeproj
+*.xcworkspace
