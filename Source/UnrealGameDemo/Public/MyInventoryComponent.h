@@ -96,5 +96,10 @@ public:
 	//BlueprintAssignable 允许我们在蓝图里使用 "Bind Event to..." 节点来监听这个大喇叭。
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryUpdated OnInventoryUpdated;
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory|Persistence")
+	void SaveInventory(); // 将当前背包写入存档
 	
+	UFUNCTION(BlueprintCallable, Category = "Inventory|Persistence")
+	void LoadInventory(); // 从存档读取背包并同步到当前组件
 };

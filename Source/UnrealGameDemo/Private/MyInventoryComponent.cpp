@@ -1,4 +1,6 @@
 #include "UnrealGameDemo/Public/MyInventoryComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "MySaveGame.h"
 
 UMyInventoryComponent::UMyInventoryComponent()
 {
@@ -133,4 +135,42 @@ int32 UMyInventoryComponent::GetItemQuantity(FName ItemID) const
 	}
 	
 	return 0; // 没有这个物品，数量为 0
+}
+
+void UMyInventoryComponent::SaveInventory()
+{
+	// 创建一个 UMySaveGame 的实例来存储当前背包数据
+	if (UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::CreateSaveGameObject(UMySaveGame::StaticClass())))
+	{
+		SaveGameInstance->SavedInventory = InventoryItems;
+		const bool bSaved = UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("Slot_1"), 0);
+		UE_LOG(LogTemp, Log, TEXT("SaveInventory: %s"), bSaved ? TEXT("存档成功") : TEXT("存档失败"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("SaveInventory: 游戏存档对象创建失败"));
+	}
+}
+
+void UMyInventoryComponent::LoadInventory()
+{
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("Slot_1"), 0))
+	{
+		if (UMySaveGame* SaveGameInstance = Cast<UMySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("Slot_1"), 0)))
+		{
+			InventoryItems = SaveGameInstance->SavedInventory;
+			
+			UE_LOG(LogTemp, Log, TEXT("LoadInventory: 加载 %d 物品"), InventoryItems.Num());
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("LoadInventory: 加载存档失败"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("LoadInventory: 存档槽不存在"));
+	}
+
+	OnInventoryUpdated.Broadcast();
 }
